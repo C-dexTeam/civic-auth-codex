@@ -1,26 +1,35 @@
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
+
 // ** Store Imports
 import { store } from '@/store'
 import { Provider } from 'react-redux'
+
 // ** Loader Import
 import NProgress from 'nprogress'
+
 // ** Config Imports
 import { defaultACLObj } from '@/configs/acl'
 import themeConfig from '@/configs/themeConfig'
+
 // ** Third Party Import
 import { Toaster } from 'react-hot-toast'
+
 // ** Spinner Import
 import Spinner from '@/components/spinner'
+
 // ** Contexts
 import { AuthProvider } from '@/context/AuthContext'
+
 // ** Styled Components
 import ReactHotToast from '@/components/react-hot-toast'
+
 // ** Component Imports
 import Layout from '@/layout/Layout'
 import GuestGuard from '@/layout/auth/GuestGuard'
 import AuthGuard from '@/layout/auth/AuthGuard'
+
 // ** Global css styles
 import '../styles/main.css'
 import "keen-slider/keen-slider.min.css"
@@ -32,6 +41,22 @@ import AclGuard from '@/layout/auth/AclGuard'
 import { Wallet } from '@/layout/auth/Wallet'
 import { useEffect } from 'react'
 import AdminLayout from '@/layout/admin/AdminLayout'
+
+// ✅ Civic Auth import
+import { CivicAuthProvider } from '@civic/auth/react'
+
+// ✅ Civic callbacks
+const onSignIn = (error) => {
+  if (error) {
+    console.error("❌ Sign-in error:", error)
+  } else {
+    console.log("✅ User signed in successfully!")
+  }
+}
+
+const onSignOut = () => {
+  console.log("👋 User signed out")
+}
 
 // ** Pace Loader
 if (themeConfig.routingLoader) {
@@ -56,30 +81,29 @@ const Guard = ({ children, authGuard, guestGuard }) => {
   }
 }
 
-// ** Configure JSS & ClassName
 const App = props => {
   const { Component, pageProps } = props
 
-  // Variables
-  const getLayout = Component.admin ? (page => <AdminLayout>{page}</AdminLayout>) : Component.getLayout ?? (page => <Layout>{page}</Layout>)
+  const getLayout = Component.admin
+    ? (page => <AdminLayout>{page}</AdminLayout>)
+    : Component.getLayout ?? (page => <Layout>{page}</Layout>)
+
   const authGuard = Component.authGuard ?? true
   const guestGuard = Component.guestGuard ?? false
   const aclAbilities = Component.acl ?? defaultACLObj
 
   useEffect(() => {
     const container = document.querySelectorAll(".stars");
-    const n = 64; //Amount of stars
+    const n = 64;
 
     container.forEach((item) => {
       for (let i = n; i > 0; i--) {
-        //Rng stuff
         let pos1 = Math.random() * 100 + "%";
         let pos2 = Math.random() * 100 + "%";
         let size = Math.random() * 3;
 
         let star = document.createElement("star");
 
-        //Individual Properties
         star.classList.add("star");
         star.style.height = size + "px";
         star.style.width = size + "px";
@@ -87,19 +111,12 @@ const App = props => {
         star.style.right = pos2;
         star.style.boxShadow = `0 0 ${size + 2 + "px"} 1px rgba(255,255,255,0.2)`;
 
-        // sarı yıldızlar
-        let randn = Math.random() * 100
-        if (randn > 56 && randn < 64) {
-          star.classList.add("yellow");
-        } else if (randn > 64 && randn < 72) {
-          star.classList.add("orange");
-        } else if (randn > 72 && randn < 80) {
-          star.classList.add("red");
-        } else if (randn > 80 && randn < 100) {
-        }
+        let randn = Math.random() * 100;
+        if (randn > 56 && randn < 64) star.classList.add("yellow");
+        else if (randn > 64 && randn < 72) star.classList.add("orange");
+        else if (randn > 72 && randn < 80) star.classList.add("red");
 
-        let randn2 = Math.random() * 100
-        // yanıp sönme efekti ver
+        let randn2 = Math.random() * 100;
         if (randn2 > 16 && randn2 < 32) {
           let duration = Math.random() * 5 + 2;
           star.style.animation = `twinkle ${duration}s infinite`;
@@ -108,7 +125,6 @@ const App = props => {
         item.append(star);
       }
     });
-
   }, [])
 
   return (
@@ -120,21 +136,29 @@ const App = props => {
       </Head>
 
       <Wallet>
-        <AuthProvider>
-          <ThemeComponent>
-            <WindowWrapper>
-              <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
-                  {getLayout(<Component {...pageProps} />)}
-                </AclGuard>
-              </Guard>
-            </WindowWrapper>
+        <CivicAuthProvider
+          clientId="YOUR_CLIENT_ID"
+          iframeMode="embedded"
+          displayMode="new_tab"
+          onSignIn={onSignIn}
+          onSignOut={onSignOut}
+        >
+          <AuthProvider>
+            <ThemeComponent>
+              <WindowWrapper>
+                <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                  <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
+                    {getLayout(<Component {...pageProps} />)}
+                  </AclGuard>
+                </Guard>
+              </WindowWrapper>
 
-            <ReactHotToast>
-              <Toaster position={themeConfig.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-            </ReactHotToast>
-          </ThemeComponent>
-        </AuthProvider>
+              <ReactHotToast>
+                <Toaster position={themeConfig.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+              </ReactHotToast>
+            </ThemeComponent>
+          </AuthProvider>
+        </CivicAuthProvider>
       </Wallet>
     </Provider>
   )

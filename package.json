@@ -11,6 +11,8 @@
   "dependencies": {
     "@casl/ability": "^6.5.0",
     "@casl/react": "^3.1.0",
+    "@civic/auth": "^0.4.7",
+    "@civic/auth-web3": "^0.5.4",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
