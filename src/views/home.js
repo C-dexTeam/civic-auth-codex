@@ -419,7 +419,7 @@ const Home = () => {
                             </Typography>
 
                             <Button sx={{ mt: "1rem" }} fullWidth={isMobile}>
-                                Start Course
+                                Connect Wallet
                             </Button>
                         </Box>
                     </Box>
