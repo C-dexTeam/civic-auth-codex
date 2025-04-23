@@ -7,6 +7,7 @@ It combines hands-on coding exercises, wallet integration, and real-time validat
 > 🚀 This project received a **grant from Superteam Turkey** to support the growth of the Solana developer ecosystem in the region.
 
 ---
+![image](https://github.com/user-attachments/assets/ee200eae-a87f-4f92-bca0-350c392eb736)
 
 ## ✨ Features
 
