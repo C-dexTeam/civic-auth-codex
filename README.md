@@ -9,6 +9,10 @@ It combines hands-on coding exercises, wallet integration, and real-time validat
 ---
 ![image](https://github.com/user-attachments/assets/ee200eae-a87f-4f92-bca0-350c392eb736)
 
+## 🏗️ Arch
+![image](https://github.com/user-attachments/assets/fdf9ea31-e8cb-4775-b8e6-0baf2432adf3)
+
+
 ## ✨ Features
 
 - 🎯 Interactive lessons with code validation
